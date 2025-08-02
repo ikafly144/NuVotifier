@@ -12,5 +12,6 @@
   "dependencyDashboard": false,
   "automerge": true,
   "branchConcurrentLimit": 0,
-  "stabilityDays": 3
+  "stabilityDays": 3,
+  "forkProcessing": "enabled"
 }
