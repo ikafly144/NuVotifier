@@ -10,7 +10,7 @@ import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.withType
 
-fun Project.applyCommonJavaConfiguration(sourcesJar: Boolean, javaRelease: Int = 8, banSlf4j: Boolean = true) {
+fun Project.applyCommonJavaConfiguration(sourcesJar: Boolean, javaRelease: Int = 21, banSlf4j: Boolean = true) {
     applyCommonConfiguration()
     apply(plugin = "eclipse")
     apply(plugin = "idea")
@@ -40,6 +40,7 @@ fun Project.applyCommonJavaConfiguration(sourcesJar: Boolean, javaRelease: Int =
         "testImplementation"("org.mockito:mockito-core:${Versions.MOCKITO}")
         "testImplementation"("org.mockito:mockito-junit-jupiter:${Versions.MOCKITO}")
         "testRuntimeOnly"("org.junit.jupiter:junit-jupiter-engine:${Versions.JUNIT}")
+        "testRuntimeOnly"("org.junit.platform:junit-platform-launcher")
     }
 
     // Java 8 turns on doclint which we fail

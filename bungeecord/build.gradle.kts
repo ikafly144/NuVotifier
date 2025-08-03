@@ -30,7 +30,7 @@ tasks.named<Copy>("processResources") {
     val internalVersion = project.ext["internalVersion"]
     inputs.property("internalVersion", internalVersion)
     filesMatching("bungee.yml") {
-        expand("internalVersion" to internalVersion)
+        expand(mapOf("internalVersion" to internalVersion))
     }
 }
 

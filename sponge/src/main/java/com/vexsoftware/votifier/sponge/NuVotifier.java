@@ -18,32 +18,37 @@ import com.vexsoftware.votifier.sponge.forwarding.SpongePluginMessagingForwardin
 import com.vexsoftware.votifier.support.forwarding.ForwardedVoteListener;
 import com.vexsoftware.votifier.support.forwarding.ForwardingVoteSink;
 import com.vexsoftware.votifier.util.KeyCreator;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.spongepowered.api.Server;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.command.args.GenericArguments;
-import org.spongepowered.api.command.spec.CommandSpec;
+import org.spongepowered.api.command.Command;
+import org.spongepowered.api.command.parameter.Parameter;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.game.GameReloadEvent;
-import org.spongepowered.api.event.game.state.GameStartedServerEvent;
-import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
-import org.spongepowered.api.plugin.Plugin;
-import org.spongepowered.api.text.Text;
+import org.spongepowered.api.event.lifecycle.LoadedGameEvent;
+import org.spongepowered.api.event.lifecycle.RegisterCommandEvent;
+import org.spongepowered.api.event.lifecycle.StoppingEngineEvent;
+import org.spongepowered.api.scheduler.Task;
+import org.spongepowered.plugin.PluginContainer;
+import org.spongepowered.plugin.builtin.jvm.Plugin;
+import org.spongepowered.plugin.metadata.PluginMetadata;
+import org.spongepowered.plugin.metadata.builtin.StandardPluginMetadata;
 
 import java.io.File;
+import java.net.URI;
 import java.security.Key;
 import java.security.KeyPair;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
-@Plugin(id = "nuvotifier", name = "NuVotifier", version = "@version@", authors = "Ichbinjoe",
-        description = "Safe, smart, and secure Votifier server plugin")
-public class NuVotifier implements VoteHandler, VotifierPlugin, ForwardedVoteListener {
+@Plugin("nuvotifier")
+public class NuVotifier implements VoteHandler, VotifierPlugin, ForwardedVoteListener, PluginContainer {
 
     @Inject
     public Logger logger;
 
-    private SLF4JLogger loggerAdapter;
+    private LoggingAdapter loggerAdapter;
 
     @Inject
     @ConfigDir(sharedRoot = false)
@@ -164,24 +169,22 @@ public class NuVotifier implements VoteHandler, VotifierPlugin, ForwardedVoteLis
     }
 
     @Listener
-    public void onServerStart(GameStartedServerEvent event) {
+    public void onServerStart(RegisterCommandEvent<Command.Parameterized> event) {
         this.scheduler = new SpongeScheduler(this);
-        this.loggerAdapter = new SLF4JLogger(logger);
+        this.loggerAdapter = new Log4JLogger(logger);
 
-        CommandSpec nvreloadSpec = CommandSpec.builder()
-                .description(Text.of("Reloads NuVotifier"))
+        Command.Parameterized nvreloadSpec = Command.builder()
                 .permission("nuvotifier.reload")
                 .executor(new NVReloadCmd(this)).build();
 
-        Sponge.getCommandManager().register(this, nvreloadSpec, "nvreload");
+        event.register(this, nvreloadSpec, "nvreload");
 
-        CommandSpec testvoteSpec = CommandSpec.builder()
-                .arguments(GenericArguments.allOf(GenericArguments.string(Text.of("args"))))
-                .description(Text.of("Sends a test vote to the server's listeners"))
+        Command.Parameterized testvoteSpec = Command.builder()
+                .addParameter(Parameter.string().key("arg").build())
                 .permission("nuvotifier.testvote")
                 .executor(new TestVoteCmd(this)).build();
 
-        Sponge.getCommandManager().register(this, testvoteSpec, "testvote");
+        event.register(this, testvoteSpec, "testvote");
 
         if (!loadAndBind()) {
             gracefulExit();
@@ -189,12 +192,12 @@ public class NuVotifier implements VoteHandler, VotifierPlugin, ForwardedVoteLis
     }
 
     @Listener
-    public void onGameReload(GameReloadEvent event) {
+    public void onGameReload(LoadedGameEvent event) {
         this.reload();
     }
 
     @Listener
-    public void onServerStop(GameStoppingServerEvent event) {
+    public void onServerStop(StoppingEngineEvent<Server> event) {
         halt();
         logger.info("Votifier disabled.");
     }
@@ -221,7 +224,7 @@ public class NuVotifier implements VoteHandler, VotifierPlugin, ForwardedVoteLis
     /**
      * Keys used for websites.
      */
-    private Map<String, Key> tokens = new HashMap<>();
+    private final Map<String, Key> tokens = new HashMap<>();
 
     private ForwardingVoteSink forwardingMethod;
 
@@ -292,11 +295,42 @@ public class NuVotifier implements VoteHandler, VotifierPlugin, ForwardedVoteLis
     }
 
     private void fireVoteEvent(final Vote vote) {
-        Sponge.getScheduler().createTaskBuilder()
+        Sponge.asyncScheduler().submit(Task.builder()
+                .plugin(this)
                 .execute(() -> {
-                    VotifierEvent event = new VotifierEvent(vote, Sponge.getCauseStackManager().getCurrentCause());
-                    Sponge.getEventManager().post(event);
+                    VotifierEvent event = new VotifierEvent(vote, Sponge.systemSubject().contextCause());
+                    Sponge.eventManager().post(event);
                 })
-                .submit(this);
+                .build()
+        );
+    }
+
+    @Override
+    public PluginMetadata metadata() {
+        PluginContainer container = Sponge.pluginManager().plugin("nuvotifier").orElse(null);
+        if (container != null) {
+            return container.metadata();
+        }
+        return StandardPluginMetadata.builder()
+                .id("nuvotifier")
+                .name("NuVotifier")
+                .version("1.0.0")
+                .description("A Sponge plugin for handling votes from various voting sites.")
+                .build();
+    }
+
+    @Override
+    public Logger logger() {
+        return logger;
+    }
+
+    @Override
+    public Object instance() {
+        return this;
+    }
+
+    @Override
+    public Optional<URI> locateResource(String path) {
+        return Optional.empty();
     }
 }

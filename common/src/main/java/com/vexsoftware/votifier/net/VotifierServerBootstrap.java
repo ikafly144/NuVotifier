@@ -8,20 +8,16 @@ import com.vexsoftware.votifier.support.forwarding.cache.VoteCache;
 import com.vexsoftware.votifier.support.forwarding.proxy.ProxyForwardingVoteSource;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.epoll.Epoll;
-import io.netty.channel.epoll.EpollEventLoopGroup;
+import io.netty.channel.epoll.EpollIoHandler;
 import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.epoll.EpollSocketChannel;
-import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.nio.NioIoHandler;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.concurrent.FastThreadLocalThread;
-import io.netty.util.concurrent.GlobalEventExecutor;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -49,12 +45,12 @@ public class VotifierServerBootstrap {
         this.plugin = plugin;
         this.v1Disable = v1Disable;
         if (USE_EPOLL) {
-            this.bossLoopGroup = new EpollEventLoopGroup(1, createThreadFactory("Votifier epoll boss"));
-            this.eventLoopGroup = new EpollEventLoopGroup(3, createThreadFactory("Votifier epoll worker"));
+            this.bossLoopGroup = new MultiThreadIoEventLoopGroup(1, createThreadFactory("Votifier epoll boss"), EpollIoHandler.newFactory());
+            this.eventLoopGroup = new MultiThreadIoEventLoopGroup(3, createThreadFactory("Votifier epoll worker"), EpollIoHandler.newFactory());
             plugin.getPluginLogger().info("Using epoll transport to accept votes.");
         } else {
-            this.bossLoopGroup = new NioEventLoopGroup(1, createThreadFactory("Votifier NIO boss"));
-            this.eventLoopGroup = new NioEventLoopGroup(3, createThreadFactory("Votifier NIO worker"));
+            this.bossLoopGroup = new MultiThreadIoEventLoopGroup(1, createThreadFactory("Votifier NIO boss"), NioIoHandler.newFactory());
+            this.eventLoopGroup = new MultiThreadIoEventLoopGroup(3, createThreadFactory("Votifier NIO worker"), NioIoHandler.newFactory());
             plugin.getPluginLogger().info("Using NIO transport to accept votes.");
         }
     }

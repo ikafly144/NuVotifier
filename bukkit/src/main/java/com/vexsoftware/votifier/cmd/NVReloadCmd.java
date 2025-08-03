@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
 public class NVReloadCmd implements CommandExecutor {
 
@@ -15,16 +16,16 @@ public class NVReloadCmd implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(CommandSender sender, @NotNull Command command, @NotNull String label, String @NotNull [] args) {
         if (sender.hasPermission("nuvotifier.reload")) {
-            sender.sendMessage(ChatColor.GRAY + "Reloading NuVotifier...");
+            sender.sendRichMessage("<gray>" + "Reloading NuVotifier...");
             if (plugin.reload()) {
-                sender.sendMessage(ChatColor.DARK_GREEN + "NuVotifier has been reloaded!");
+                sender.sendRichMessage("<dark_green>" + "NuVotifier has been reloaded!");
             } else {
-                sender.sendMessage(ChatColor.DARK_RED + "Looks like there was a problem reloading NuVotifier, check the console!");
+                sender.sendRichMessage("<dark_red>" + "Looks like there was a problem reloading NuVotifier, check the console!");
             }
         } else {
-            sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to do this!");
+            sender.sendRichMessage("<dark_red>" + "You do not have permission to do this!");
         }
         return true;
     }

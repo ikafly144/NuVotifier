@@ -3,11 +3,12 @@ package com.vexsoftware.votifier.forwarding;
 import com.vexsoftware.votifier.NuVotifierBukkit;
 import com.vexsoftware.votifier.support.forwarding.AbstractPluginMessagingForwardingSink;
 import com.vexsoftware.votifier.support.forwarding.ForwardedVoteListener;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.logging.Level;
 
@@ -33,7 +34,7 @@ public class BukkitPluginMessagingForwardingSink extends AbstractPluginMessaging
     }
 
     @Override
-    public void onPluginMessageReceived(String s, Player player, byte[] bytes) {
+    public void onPluginMessageReceived(@NotNull String s, @NotNull Player player, byte @NotNull [] bytes) {
         try {
             this.handlePluginMessage(bytes);
         } catch (Exception e) {

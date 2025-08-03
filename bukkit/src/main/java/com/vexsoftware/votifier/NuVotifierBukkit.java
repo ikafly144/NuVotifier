@@ -51,6 +51,7 @@ import java.security.Key;
 import java.security.KeyPair;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.logging.Level;
 
 /**
@@ -79,7 +80,7 @@ public class NuVotifierBukkit extends JavaPlugin implements VoteHandler, Votifie
     /**
      * Keys used for websites.
      */
-    private Map<String, Key> tokens = new HashMap<>();
+    private final Map<String, Key> tokens = new HashMap<>();
 
     private ForwardingVoteSink forwardingMethod;
     private VotifierScheduler scheduler;
@@ -114,7 +115,7 @@ public class NuVotifierBukkit extends JavaPlugin implements VoteHandler, Votifie
          * assigned to the server.
          */
         String hostAddr = Bukkit.getServer().getIp();
-        if (hostAddr == null || hostAddr.length() == 0)
+        if (hostAddr.isEmpty())
             hostAddr = "0.0.0.0";
 
         /*
@@ -131,7 +132,9 @@ public class NuVotifierBukkit extends JavaPlugin implements VoteHandler, Votifie
                 }
 
                 // Load and manually replace variables in the configuration.
-                String cfgStr = new String(IOUtil.readAllBytes(getResource("bukkitConfig.yml")), StandardCharsets.UTF_8);
+                String cfgStr = new String(IOUtil.readAllBytes(
+                        Objects.requireNonNull(getResource("bukkitConfig.yml"))
+                ), StandardCharsets.UTF_8);
                 String token = TokenUtil.newToken();
                 cfgStr = cfgStr.replace("%default_token%", token).replace("%ip%", hostAddr);
                 Files.copy(new ByteArrayInputStream(cfgStr.getBytes(StandardCharsets.UTF_8)), config.toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -279,12 +282,12 @@ public class NuVotifierBukkit extends JavaPlugin implements VoteHandler, Votifie
 
     @Override
     public void onEnable() {
-        getCommand("nvreload").setExecutor(new NVReloadCmd(this));
-        getCommand("testvote").setExecutor(new TestVoteCmd(this));
+        Objects.requireNonNull(getCommand("nvreload")).setExecutor(new NVReloadCmd(this));
+        Objects.requireNonNull(getCommand("testvote")).setExecutor(new TestVoteCmd(this));
 
         if (!loadAndBind()) {
             gracefulExit();
-            setEnabled(false); // safer to just bomb out
+            getServer().getPluginManager().disablePlugin(this); // safer to just bomb out
         }
     }
 

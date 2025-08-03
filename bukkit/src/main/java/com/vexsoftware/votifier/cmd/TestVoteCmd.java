@@ -8,6 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
 public class TestVoteCmd implements CommandExecutor {
 
@@ -18,21 +19,21 @@ public class TestVoteCmd implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(CommandSender sender, @NotNull Command command, @NotNull String label, String @NotNull [] args) {
         if (sender.hasPermission("nuvotifier.testvote")) {
             Vote v;
             try {
                 v = ArgsToVote.parse(args);
             } catch (IllegalArgumentException e) {
-                sender.sendMessage(ChatColor.DARK_RED + "Error while parsing arguments to create test vote: " + e.getMessage());
-                sender.sendMessage(ChatColor.GRAY + "Usage hint: /testvote [username] [serviceName=?] [username=?] [address=?] [localTimestamp=?] [timestamp=?]");
+                sender.sendRichMessage("<dark_red>" + "Error while parsing arguments to create test vote: " + e.getMessage());
+                sender.sendRichMessage("<gray>" + "Usage hint: /testvote [username] [serviceName=?] [username=?] [address=?] [localTimestamp=?] [timestamp=?]");
                 return true;
             }
 
             plugin.onVoteReceived(v, VotifierSession.ProtocolVersion.TEST, "localhost.test");
-            sender.sendMessage(ChatColor.GREEN + "Test vote executed: " + v.toString());
+            sender.sendRichMessage("<green>" + "Test vote executed: " + v);
         } else {
-            sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to do this!");
+            sender.sendMessage("<dark_red>" + "You do not have permission to do this!");
         }
         return true;
 

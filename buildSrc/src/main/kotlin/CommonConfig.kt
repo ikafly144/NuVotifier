@@ -17,6 +17,10 @@ fun Project.applyCommonConfiguration() {
             name = "Fabric"
             url = uri("https://maven.fabricmc.net/")
         }
+        maven {
+            name = "sponge"
+            url = uri("https://repo.spongepowered.org/maven/")
+        }
     }
 
     configurations.all {
@@ -27,7 +31,7 @@ fun Project.applyCommonConfiguration() {
 
     plugins.withId("java") {
         the<JavaPluginExtension>().toolchain {
-            languageVersion.set(JavaLanguageVersion.of(17))
+            languageVersion.set(JavaLanguageVersion.of(21))
         }
     }
 }

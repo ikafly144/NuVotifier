@@ -5,7 +5,7 @@ import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.named
 
-fun Project.applyPlatformAndCoreConfiguration(javaRelease: Int = 8) {
+fun Project.applyPlatformAndCoreConfiguration(javaRelease: Int = 21) {
     applyCommonConfiguration()
     apply(plugin = "java")
     apply(plugin = "maven-publish")
@@ -20,7 +20,7 @@ fun Project.applyPlatformAndCoreConfiguration(javaRelease: Int = 8) {
 }
 
 fun Project.applyShadowConfiguration() {
-    apply(plugin = "com.github.johnrengelman.shadow")
+    apply(plugin = "com.gradleup.shadow")
     tasks.named<ShadowJar>("shadowJar") {
         archiveClassifier.set("dist")
         dependencies {

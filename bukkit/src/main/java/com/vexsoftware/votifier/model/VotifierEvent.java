@@ -2,6 +2,7 @@ package com.vexsoftware.votifier.model;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * {@code VotifierEvent} is a custom Bukkit event class that is sent
@@ -19,7 +20,7 @@ public class VotifierEvent extends Event {
     /**
      * Encapsulated vote record.
      */
-    private Vote vote;
+    private final Vote vote;
 
     /**
      * Constructs a vote event that encapsulated the given vote record.
@@ -51,7 +52,7 @@ public class VotifierEvent extends Event {
     }
 
     @Override
-    public HandlerList getHandlers() {
+    public @NotNull HandlerList getHandlers() {
         return handlers;
     }
 

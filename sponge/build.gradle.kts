@@ -5,19 +5,25 @@ import org.spongepowered.plugin.metadata.model.PluginDependency
 plugins {
     `java-library`
     id("org.spongepowered.gradle.plugin")
-    id("net.kyori.blossom")
+    id("net.kyori.blossom") version "2.1.0"
 }
 
 applyPlatformAndCoreConfiguration()
 applyCommonArtifactoryConfig()
 applyShadowConfiguration()
 
-blossom {
-    replaceToken("@version@", project.ext["internalVersion"])
+sourceSets {
+    main {
+        blossom {
+            javaSources {
+                property("@version@", project.ext["internalVersion"].toString())
+            }
+        }
+    }
 }
 
 sponge {
-    apiVersion("7.2.0")
+    apiVersion("16.0.0-SNAPSHOT")
     loader {
         name(PluginLoaders.JAVA_PLAIN)
         version("1.0")
@@ -39,7 +45,7 @@ sponge {
         dependency("spongeapi") {
             loadOrder(PluginDependency.LoadOrder.AFTER)
             optional(false)
-            version("7.2.0")
+            version("16.0.0-SNAPSHOT")
         }
     }
 }
@@ -56,7 +62,8 @@ configurations {
 }
 
 dependencies {
-    compileOnly("org.spongepowered:spongeapi:7.2.0")
+    compileOnly("org.spongepowered:spongeapi:16.0.0-SNAPSHOT")
+    compileOnly("org.spongepowered:plugin-spi:0.4.0")
 
     "api"(project(":nuvotifier-api"))
     "api"(project(":nuvotifier-common"))

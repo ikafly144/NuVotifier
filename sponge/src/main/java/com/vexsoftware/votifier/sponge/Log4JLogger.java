@@ -1,12 +1,12 @@
 package com.vexsoftware.votifier.sponge;
 
 import com.vexsoftware.votifier.platform.LoggingAdapter;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.Logger;
 
-public class SLF4JLogger implements LoggingAdapter {
+public class Log4JLogger implements LoggingAdapter {
 
     private final Logger l;
-    public SLF4JLogger(Logger l) {
+    public Log4JLogger(Logger l) {
         this.l = l;
     }
 
