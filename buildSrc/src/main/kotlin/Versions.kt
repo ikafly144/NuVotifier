@@ -3,6 +3,6 @@ object Versions {
     const val MOCKITO = "4.3.1"
     const val FINDBUGS = "3.0.2"
     const val NETTYIO = "4.2.3.Final"
-    const val GSON = "2.9.0"
+    const val GSON = "2.13.1"
     const val VELOCITY = "3.4.0-SNAPSHOT"
 }
