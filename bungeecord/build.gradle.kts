@@ -20,7 +20,7 @@ configurations {
 }
 
 dependencies {
-    "compileOnly"("net.md-5:bungeecord-api:1.18-R0.1-SNAPSHOT")
+    "compileOnly"("net.md-5:bungeecord-api:1.21-R0.3")
     "api"(project(":nuvotifier-api"))
     "api"(project(":nuvotifier-common"))
 }
