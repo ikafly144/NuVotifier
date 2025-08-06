@@ -18,7 +18,7 @@ repositories {
 
 dependencies {
     implementation(gradleApi())
-    implementation("org.ajoberstar.grgit:grgit-gradle:4.1.1")
+    implementation("org.ajoberstar.grgit:grgit-gradle:5.3.2")
     implementation("com.gradleup.shadow:com.gradleup.shadow.gradle.plugin:9.0.0-SNAPSHOT")
     implementation("org.jfrog.buildinfo:build-info-extractor-gradle:4.34.2")
     implementation("org.spongepowered.gradle.plugin:org.spongepowered.gradle.plugin.gradle.plugin:2.3.0")
