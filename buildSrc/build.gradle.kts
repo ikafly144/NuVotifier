@@ -23,5 +23,5 @@ dependencies {
     implementation("org.jfrog.buildinfo:build-info-extractor-gradle:6.0.0")
     implementation("org.spongepowered.gradle.plugin:org.spongepowered.gradle.plugin.gradle.plugin:2.3.0")
     implementation("net.fabricmc:fabric-loom:1.11.7")
-    implementation("com.jfrog.artifactory:com.jfrog.artifactory.gradle.plugin:6.0.0")
+    implementation("com.jfrog.artifactory:com.jfrog.artifactory.gradle.plugin:6.0.1")
 }
