@@ -11,5 +11,5 @@ dependencies {
     "implementation"("io.netty:netty-transport-native-epoll:${Versions.NETTYIO}:linux-x86_64")
     "implementation"("com.google.code.gson:gson:${Versions.GSON}")
     "testImplementation"("org.json:json:20250517") // retain this for testing reasons
-    "testImplementation"("com.google.guava:guava:33.4.8-jre")
+    "testImplementation"("com.google.guava:guava:33.5.0-jre")
 }
