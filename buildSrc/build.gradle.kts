@@ -19,7 +19,7 @@ repositories {
 dependencies {
     implementation(gradleApi())
     implementation("org.ajoberstar.grgit:grgit-gradle:5.3.3")
-    implementation("com.gradleup.shadow:com.gradleup.shadow.gradle.plugin:9.1.0")
+    implementation("com.gradleup.shadow:com.gradleup.shadow.gradle.plugin:9.2.1")
     implementation("org.jfrog.buildinfo:build-info-extractor-gradle:6.0.1")
     implementation("org.spongepowered.gradle.plugin:org.spongepowered.gradle.plugin.gradle.plugin:2.3.0")
     implementation("net.fabricmc:fabric-loom:1.11.8")
