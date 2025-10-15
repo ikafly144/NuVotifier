@@ -2,7 +2,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
     `java-library`
-    id("net.kyori.blossom") version "2.1.0"
+    id("net.kyori.blossom") version "2.2.0"
 }
 
 applyPlatformAndCoreConfiguration()
