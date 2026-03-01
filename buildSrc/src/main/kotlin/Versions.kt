@@ -4,5 +4,5 @@ object Versions {
     const val FINDBUGS = "3.0.2"
     const val NETTYIO = "4.2.7.Final"
     const val GSON = "2.13.2"
-    const val VELOCITY = "3.4.0-SNAPSHOT"
+    const val VELOCITY = "3.4.0"
 }
