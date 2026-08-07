@@ -63,7 +63,7 @@ configurations {
 
 dependencies {
     compileOnly("org.spongepowered:spongeapi:17.0.0")
-    compileOnly("org.spongepowered:plugin-spi:0.4.0")
+    compileOnly("org.spongepowered:plugin-spi:0.5.0")
 
     "api"(project(":nuvotifier-api"))
     "api"(project(":nuvotifier-common"))
