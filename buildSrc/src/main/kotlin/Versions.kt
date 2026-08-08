@@ -2,7 +2,7 @@ object Versions {
     const val JUNIT = "5.13.4"
     const val MOCKITO = "4.3.1"
     const val FINDBUGS = "3.0.2"
-    const val NETTYIO = "4.2.16.Final"
+    const val NETTYIO = "4.2.17.Final"
     const val GSON = "2.14.0"
     const val VELOCITY = "4.0.0"
 }
