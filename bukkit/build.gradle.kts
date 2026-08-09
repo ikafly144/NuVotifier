@@ -20,7 +20,7 @@ configurations {
 }
 
 dependencies {
-    "compileOnly"("io.papermc.paper:paper-api:26.2.build.98-stable")
+    "compileOnly"("io.papermc.paper:paper-api:26.2.build.100-stable")
     "api"(project(":nuvotifier-api"))
     "api"(project(":nuvotifier-common"))
 }
